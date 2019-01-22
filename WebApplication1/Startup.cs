@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WebApplication1.Controllers;
 using WebApplication1.Services;
 
 namespace WebApplication1
@@ -37,6 +38,8 @@ namespace WebApplication1
 
             // Add custom service
             services.AddTransient<IEmailSender, EmailSender>();
+
+            services.AddTransient<HomeController>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,6 +54,16 @@ namespace WebApplication1
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
+            
+            app.Use(async (context, next) =>
+            {
+                await next.Invoke();
+            });
+
+            app.Run(async context =>
+            {
+                await context.Response.WriteAsync("Hello from second delegate!");
+            });
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
