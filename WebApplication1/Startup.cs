@@ -55,16 +55,6 @@ namespace WebApplication1
                 app.UseHsts();
             }
             
-            app.Use(async (context, next) =>
-            {
-                await next.Invoke();
-            });
-
-            app.Run(async context =>
-            {
-                await context.Response.WriteAsync("Hello from second delegate!");
-            });
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
